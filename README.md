@@ -2,7 +2,7 @@
 
 # 프로젝트 생성
 ## webpack install  
-세 가지 파일을 개발의존성으로 설치한다.
+세 가지 패키지를 개발의존성으로 설치한다.
 
 - webpack
 - webpack-cli
@@ -51,7 +51,7 @@ path1과 path2를 이어 하나의 경로로 반환한다.
 path와 filename은 지정하지 않으면 자동으로 dist, entry 파일명으로 설정되기 때문에 위의 예시와 같이 작성할 필요는 없다.  
 
 ## plugins
-아래 파일을 개발의존성으로 설치한다.
+아래 패키지를 개발의존성으로 설치한다.
 
 - html-webpack-plugin  
 
@@ -72,5 +72,66 @@ module.exports = {
       template: './index.html'
     })
   ]
+}
+```
+  
+# 정적 파일 연결  
+- 1단계  
+`static` 폴더 안에 `images`라는 폴더를 만들고 그 안에 연결할 파일을 넣어보자.  
+예) [logo.png](./static/images/logo.png), [favicon.ico](./static/images/favicon.ico)  
+
+- 2단계  
+`copy-webpack-plugin` 파일을 개발의존성으로 설치한다.  
+```
+npm i -D copy-webpack-plugin
+```
+
+- 3단계  
+webpack.config.js  
+```js
+// import
+const CopyPlugin = require('copy-webpack-plugin')
+
+// export
+module.exports = {
+  // static에 있는 내용을 dist폴더로 copy해주는 역할
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        { from: 'static' }
+      ]
+    })
+  ]
+}
+```
+
+# module  
+예를 들어 css 파일을 연결할 때, 정적 파일 연결을 위해 만들어 둔 static 폴더에 css파일을 포함시켜 연결할 수도 있지만, 더 많은 기능을 위해서는 다른 방법이 필요하다.  
+root경로에 css폴더 안에 main.css파일을 연결한다고 하면 main.js에서 main.css를 import하는 방법이 그것이다.  
+main.js  
+```js
+import './css/main.css'
+```
+하지만 js는 css를 읽을 수 없어 읽을 수 있게 하는 패키지가 필요하다.
+- css-loader
+- style-loader
+```
+npm i -D css-loader style-loader
+```  
+
+webpack.config.js
+```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [  // 순서 중요!
+          'style-loader', // compile된 style 적용
+          'css-loader'  // 먼저 해석됨 - css compile
+        ]
+      }
+    ]
+  },
 }
 ```
