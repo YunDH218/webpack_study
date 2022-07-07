@@ -19,10 +19,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.s?css$/,
         use: [  // 순서 중요!
-          'style-loader', // compile된 style 적용
-          'css-loader'  // 먼저 해석됨 - css compile
+          'style-loader', // 3순위 - compile된 style 적용
+          'css-loader', // 2순위 - css compile
+          'sass-loader' // 1순위
         ]
       }
     ]

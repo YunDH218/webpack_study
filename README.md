@@ -125,7 +125,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.css$/, // css에 대하여~
         use: [  // 순서 중요!
           'style-loader', // compile된 style 적용
           'css-loader'  // 먼저 해석됨 - css compile
@@ -135,3 +135,15 @@ module.exports = {
   },
 }
 ```
+
+그럼 이제 scss를 연결하는 방법도 알아보자. `webpack.config.js`에서 css를 읽을 수 있도록하는 패키지들을 연결한 문장에서 scss에 대해서도 패키지들이 적용되도록 정규표현식을 수정해준다.
+```js
+test: /\.s?css$/,
+```
+또 scss를 읽기 위해서는 아래의 패키지가 필요하다.  
+- sass-loader
+- sass  
+```
+npm i -D sass-loader sass
+```
+`webpack.config.js`에서 sass-loader가 css-loader보다 더 먼저 해석되도록 가장 아래에 작성한다.
